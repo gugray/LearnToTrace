@@ -1,5 +1,6 @@
 import * as G from "./geo.js";
 
+const animating = false;
 const dpr = 1;
 const elmCanv = document.getElementById("canv");
 let ctx, w, h;
@@ -8,11 +9,11 @@ const camUp = new G.Vec3(0, 1, 0).normalize();
 const fov = (28 * Math.PI) / 180;
 const camPos = new G.Vec3(0, 0, 2);
 const lookAt = new G.Vec3(0, 0, 0);
-const camMat = makeCamMat(camPos, lookAt, camUp, fov);
+const camMat = new G.Mat3();
 
 setTimeout(() => {
   initCanvas();
-  render();
+  requestAnimationFrame(frame);
 }, 0);
 
 function initCanvas() {
@@ -24,7 +25,16 @@ function initCanvas() {
   h = elmCanv.height;
 }
 
-function render() {
+function frame(t) {
+  t /= 1000;
+  const dist = 2;
+  camPos.set(dist * Math.sin(t), 0, dist * Math.cos(t));
+  makeCamMat(camMat, camPos, lookAt, camUp, fov);
+  render(t);
+  if (animating) requestAnimationFrame(frame);
+}
+
+function render(t) {
   const img = ctx.getImageData(0, 0, w, h);
   const data = img.data;
 
@@ -42,18 +52,17 @@ function render() {
   ctx.putImageData(img, 0, 0);
 }
 
-function makeCamMat(camPos, lookAt, camUp, fov) {
+function makeCamMat(mat, camPos, lookAt, camUp, fov) {
   const g = 0.5 / Math.tan(fov / 2);
   const dir = lookAt.clone().sub(camPos).normalize();
   const right = dir.clone().cross(camUp);
   const up = right.clone().cross(dir);
   // prettier-ignore
-  const mat = new G.Mat3(
+  mat.set(
     right.x, up.x, dir.x * g,
     right.y, up.y, dir.y * g,
     right.z, up.z, dir.z * g,
   );
-  return mat;
 }
 
 const MAX_STEPS = 100;
@@ -107,13 +116,11 @@ function scene(pt) {
 
   // First sphere
   q.setFrom(pt);
-  q.z += 1;
   q.x -= 0.2;
   d = Math.min(d, q.length() - 0.2);
 
   // Second sphere
   q.setFrom(pt);
-  q.z += 1;
   q.x += 0.2;
   d = Math.min(d, q.length() - 0.2);
 

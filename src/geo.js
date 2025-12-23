@@ -302,6 +302,22 @@ export class Mat3 {
     this.row2_2 = row2_2;
   }
 
+  // prettier-ignore
+  set(
+    row0_0 = 0, row0_1 = 0, row0_2 = 0,
+    row1_0 = 0, row1_1 = 0, row1_2 = 0,
+    row2_0 = 0, row2_1 = 0, row2_2 = 0) {
+    this.row0_0 = row0_0;
+    this.row0_1 = row0_1;
+    this.row0_2 = row0_2;
+    this.row1_0 = row1_0;
+    this.row1_1 = row1_1;
+    this.row1_2 = row1_2;
+    this.row2_0 = row2_0;
+    this.row2_1 = row2_1;
+    this.row2_2 = row2_2;
+  }
+
   setFrom(mat) {
     this.row0_0 = mat.row0_0;
     this.row0_1 = mat.row0_1;
