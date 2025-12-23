@@ -4,6 +4,11 @@ const dpr = 1;
 const elmCanv = document.getElementById("canv");
 let ctx, w, h;
 
+const camPos = new G.Vec3(0, 0, 2);
+const lookAt = new G.Vec3(0, 0, 0);
+const camUp = new G.Vec3(0, 1, 0).normalize();
+const fov = (28 * Math.PI) / 180;
+
 setTimeout(() => {
   initCanvas();
   render();
@@ -43,7 +48,7 @@ const NORM_E = 0.0001;
 
 const IC = {
   uv: new G.Vec2(),
-  canvasPt: new G.Vec2(),
+  nc: new G.Vec2(),
   ro: new G.Vec3(),
   rd: new G.Vec3(),
   pt: new G.Vec3(),
@@ -55,10 +60,17 @@ function image(x, y) {
   // In pt, x is [-0.5, 0.5] and y depends on AR
   const ar = w / h;
   IC.uv.set(x / w - 0.5, y / h - 0.5);
-  IC.canvasPt.set(IC.uv.x, IC.uv.y / ar);
+  IC.nc.set(IC.uv.x, IC.uv.y / ar);
 
-  IC.ro.set(0, 0, 2);
-  IC.rd.set(IC.canvasPt.x, IC.canvasPt.y, 0).sub(IC.ro).normalize();
+  // Cam position and FOV
+  const camDir = lookAt.clone().sub(camPos).normalize();
+  const camDist = 0.5 / Math.tan(fov / 2);
+  const canvCenter = camPos.clone().addMul(camDir, camDist);
+  const right = camDir.clone().cross(camUp);
+  const up = right.clone().cross(camDir);
+
+  IC.ro.setFrom(camPos);
+  IC.rd.setFrom(canvCenter).addMul(right, IC.nc.x).addMul(up, IC.nc.y).sub(camPos).normalize();
 
   let stepCount = 0;
   let dist = Number.MAX_VALUE;
