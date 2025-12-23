@@ -348,7 +348,7 @@ export class Mat3 {
   }
 }
 
-function mulMat3V3(mat, v, target) {
+export function mulMat3V3(mat, v, target) {
   // prettier-ignore
   const x = v.x, y = v.y, z = v.z;
 
