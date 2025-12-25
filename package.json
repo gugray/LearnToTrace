@@ -9,6 +9,7 @@
     "email": "gabor.reads.this@gmail.com"
   },
   "dependencies": {
+    "twgl.js": "^7.0.0"
   },
   "devDependencies": {
     "@jgoz/esbuild-plugin-livereload": "^2.1.4",

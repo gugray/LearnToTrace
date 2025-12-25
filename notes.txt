@@ -1,0 +1,16 @@
+src-01
+=============================================
+first go at raytracer in JS
+worked out camera matrix; renders simple scene
+
+pov
+=============================================
+POVray scenes/movies to verify glass refraction
+
+src-02
+=============================================
+WebGL raytracer, with twgl
+
+
+
+Tile-warm: https://unsplash.com/photos/a-close-up-of-a-tiled-wall-with-orange-and-black-designs-hezNrE5QEa8
