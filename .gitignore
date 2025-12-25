@@ -1,5 +1,8 @@
 public
 node_modules
+pov/*.png
+pov/*.mp4
+pov/mov*
 .DS_Store
 .idea
 yarn-error.log
